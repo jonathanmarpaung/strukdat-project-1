@@ -4,6 +4,7 @@ bin/
 obj/
 CMakeFiles/
 .cache/
+vendor/googletest/
 
 # Files
 CMakeCache.txt
