@@ -29,6 +29,9 @@ int sizeQueue(Queue queue) {
 }
 
 void enqueue(Queue& queue, QueueAddress new_queue) {
+  new_queue->next = nullptr;
+  new_queue->prev = nullptr;
+
   if(isQueueEmpty(queue)) {
     queue.head = new_queue;
     queue.tail = new_queue;
@@ -43,12 +46,18 @@ QueueAddress dequeue(Queue& queue) {
   QueueAddress front;
 
   front = frontQueue(queue);
+
   if(!isQueueEmpty(queue)) {
     queue.head = queue.head->next;
 
     if(queue.head == nullptr) {
       queue.tail = nullptr;
+    } else {
+      queue.head->prev = nullptr;
     }
+
+    front->next = nullptr;
+    front->prev = nullptr;
   }
 
   return front;
