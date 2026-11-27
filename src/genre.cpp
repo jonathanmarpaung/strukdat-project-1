@@ -2,14 +2,12 @@
 
 #include <iostream>
 
-void initializeGenreList(GenreList& list) {
-  list.first = nullptr;
-}
+void initializeGenreList(GenreList& list) { list.first = nullptr; }
 
 void destroyGenreList(GenreList& list) {
   GenreAddress temp;
 
-  while(!isGenreListEmpty(list)) {
+  while (!isGenreListEmpty(list)) {
     removeFirstGenre(list, temp);
     delete temp;
   }
@@ -21,9 +19,9 @@ void dumpGenreList(GenreList list) {
   GenreAddress current;
 
   current = list.first;
-  while(current != nullptr) {
+  while (current != nullptr) {
     std::cout << current->info.name;
-    if(current->next != nullptr) {
+    if (current->next != nullptr) {
       std::cout << ", ";
     }
     current = current->next;
@@ -31,15 +29,13 @@ void dumpGenreList(GenreList list) {
   std::cout << std::endl;
 }
 
-bool isGenreListEmpty(GenreList list) {
-  return list.first == nullptr;
-}
+bool isGenreListEmpty(GenreList list) { return list.first == nullptr; }
 
 GenreAddress searchGenre(GenreList list, std::string name) {
   GenreAddress current;
 
   current = list.first;
-  while(current != nullptr && current->info.name != name) {
+  while (current != nullptr && current->info.name != name) {
     current = current->next;
   }
 
@@ -60,7 +56,7 @@ GenreAddress createGenreElement(std::string name) {
 void addGenre(GenreList& list, std::string name) {
   GenreAddress new_genre;
 
-  if(!doesGenreExist(list, name)) {
+  if (!doesGenreExist(list, name)) {
     new_genre = createGenreElement(name);
     insertGenreLast(list, new_genre);
   }
@@ -72,14 +68,14 @@ void removeGenre(GenreList& list, std::string name) {
   prev = nullptr;
   current = list.first;
 
-  while(current != nullptr && current->info.name != name) {
+  while (current != nullptr && current->info.name != name) {
     prev = current;
     current = current->next;
   }
 
-  if(current == list.first) {
+  if (current == list.first) {
     removeFirstGenre(list, temp);
-  } else if(current->next == nullptr) {
+  } else if (current->next == nullptr) {
     removeLastGenre(list, temp);
   } else {
     removeAfterGenre(list, prev, temp);
@@ -91,7 +87,7 @@ void removeGenre(GenreList& list, std::string name) {
 void insertGenreFirst(GenreList& list, GenreAddress new_genre) {
   GenreAddress current;
 
-  if(isGenreListEmpty(list)) {
+  if (isGenreListEmpty(list)) {
     list.first = new_genre;
   } else {
     new_genre->next = list.first;
@@ -102,11 +98,11 @@ void insertGenreFirst(GenreList& list, GenreAddress new_genre) {
 void insertGenreLast(GenreList& list, GenreAddress new_genre) {
   GenreAddress current;
 
-  if(isGenreListEmpty(list)) {
+  if (isGenreListEmpty(list)) {
     list.first = new_genre;
   } else {
     current = list.first;
-    while(current->next != nullptr) {
+    while (current->next != nullptr) {
       current = current->next;
     }
     current->next = new_genre;
@@ -117,12 +113,12 @@ void insertGenreAfter(GenreList& list, GenreAddress target, GenreAddress new_gen
   GenreAddress current;
 
   current = list.first;
-  while(current != nullptr && current != target) {
+  while (current != nullptr && current != target) {
     current = current->next;
   }
 
-  if(current != nullptr) {
-    if(current->next == nullptr) {
+  if (current != nullptr) {
+    if (current->next == nullptr) {
       insertGenreLast(list, new_genre);
     } else {
       new_genre->next = current->next;
@@ -134,7 +130,7 @@ void insertGenreAfter(GenreList& list, GenreAddress target, GenreAddress new_gen
 void removeFirstGenre(GenreList& list, GenreAddress& out) {
   out = nullptr;
 
-  if(!isGenreListEmpty(list)) {
+  if (!isGenreListEmpty(list)) {
     GenreAddress genre = list.first;
     list.first = list.first->next;
     genre->next = nullptr;
@@ -145,16 +141,16 @@ void removeFirstGenre(GenreList& list, GenreAddress& out) {
 void removeLastGenre(GenreList& list, GenreAddress& out) {
   out = nullptr;
 
-  if(!isGenreListEmpty(list)) {
+  if (!isGenreListEmpty(list)) {
     GenreAddress prev = nullptr;
     GenreAddress current = list.first;
 
-    while(current->next != nullptr) {
+    while (current->next != nullptr) {
       prev = current;
       current = current->next;
     }
 
-    if(prev == nullptr) {
+    if (prev == nullptr) {
       removeFirstGenre(list, out);
     } else {
       GenreAddress genre = current;
@@ -168,19 +164,17 @@ void removeLastGenre(GenreList& list, GenreAddress& out) {
 void removeAfterGenre(GenreList& list, GenreAddress target, GenreAddress& out) {
   out = nullptr;
 
-  if(isGenreListEmpty(list) || target == nullptr) {
-    return;
-  }
+  if (!isGenreListEmpty(list) && target != nullptr) {
+    GenreAddress current = list.first;
+    while (current != nullptr && current != target) {
+      current = current->next;
+    }
 
-  GenreAddress current = list.first;
-  while(current != nullptr && current != target) {
-    current = current->next;
-  }
-
-  if(current != nullptr && current->next != nullptr) {
-    GenreAddress genre = current->next;
-    current->next = current->next->next;
-    genre->next = nullptr;
-    out = genre;
+    if (current != nullptr && current->next != nullptr) {
+      GenreAddress genre = current->next;
+      current->next = current->next->next;
+      genre->next = nullptr;
+      out = genre;
+    }
   }
 }
